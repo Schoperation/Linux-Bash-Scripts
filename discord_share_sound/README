@@ -21,9 +21,17 @@ We need the two sinks so you don't have to hear yourself,
 and because while sinks and speakers can accept multiple sources, Discord can only accept one.
 So may as well make it a sink... your mic PLUS your games!
 
+How to configure (goliveaudio2.sh, simpler way):
 
+    - Edit the script and change the SPEAKERS and MIC variables to yours. When in doubt, use the lower numbers that don't have ".monitor" at the end. Make sure the full name is copied.
+        - For a list of speakers: pactl list sinks short
+        - For a list of mics: pactl list sources short
 
-How to configure:
+    - Run the script in the terminal. LEAVE IT RUNNING IN THE BACKGROUND. It will create two virtual sinks and three loopbacks; all will be configured automatically.
+    - If you are already in a discord call, it will automatically configure and pick up the CombinedOutput sink. You can verify in the Recording tab in pavucontrol.
+    - Go to the Playback tab and any applications you want to share should be set to ToBeRecorded.
+
+How to configure (goliveaudio.sh, older and more tedious way):
 
     - Run the script in the terminal. LEAVE IT RUNNING IN THE BACKGROUND. It will create two virtual sinks and three loopbacks where we can freely set inputs and outputs. 
       While a loopback can only have one input and one output, the virtual sinks allow us to reroute multiple loopbacks at a time.
