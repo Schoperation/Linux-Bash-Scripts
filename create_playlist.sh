@@ -26,8 +26,8 @@ CreatePlaylist () {
     beVerbose=$4
 
     echo "Creating playlist..."
-    scriptDir=pwd
-    cd $musicDir
+    scriptDir=${pwd}
+    cd "$musicDir"
 
     # Grab all music files
     thankYouForTheMusic=()
@@ -49,6 +49,7 @@ CreatePlaylist () {
     # Delete " in file
     sed -e "s/\"//g" -i "$playlistDir/$playlistName.m3u"
 
+    cd "$scriptDir"
     echo "Finished $playlistName.m3u at $playlistDir"
 }
 
@@ -107,8 +108,8 @@ elif [[ ! -d $playlistDir ]]; then
     exit 1
 fi
 
-musicDir=$(realpath $musicDir)
-playlistDir=$(realpath $playlistDir)
+musicDir=$(realpath "$musicDir")
+playlistDir=$(realpath "$playlistDir")
 
 # Ask for name of playlist
 playlistName="myPlaylist"
