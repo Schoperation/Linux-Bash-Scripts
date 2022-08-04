@@ -39,7 +39,7 @@ CreatePlaylist () {
     touch "$playlistDir/$playlistName.m3u"
     for i in "${thankYouForTheMusic[@]}"; do
 
-        echo "$(realpath --relative-to=$playlistDir "$i")" >> "$playlistDir/$playlistName.m3u"
+        echo "$(realpath --relative-to="$playlistDir" "$i")" >> "$playlistDir/$playlistName.m3u"
 
         if $beVerbose; then
             echo "Added $i"
