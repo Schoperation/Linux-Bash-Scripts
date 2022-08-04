@@ -8,3 +8,5 @@ restart_discord -> Cleans (ish) and restarts discord when it inevitably freezes 
 
 goliveaudio -> Sets up virtual sinks and loopbacks in order to be able to share computer audio to discord. Naturally EVERYONE has to hear it but ehhhh they'll live.
 
+create_playlist -> Creates a m3u playlist relative to a folder of music. Getting the filenames to properly print was a much bigger pain in the ass than it needed to be. Oh well.
+
