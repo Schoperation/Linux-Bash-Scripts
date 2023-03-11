@@ -2,14 +2,15 @@
 
 # Displays info about the program
 Help () {
-    echo "Creates a .m3u playlist of all music files within a directory."
+    echo "Creates a .m3u playlist of all music files within a directory. By default, the file paths in the playlist will be relative."
     echo
     echo "Basic usage: ./create_playlist.sh --music <directory> --playlist <directory>"
     echo 
     echo "--help      -h               Print this help message."
     echo "--verbose   -v               Print music files as they are added to the playlist."
     echo "--music     -m   <directory> The directory where the music is. Picks up just mp3, ogg, wav, and m4a for now. ONLY in the same directory."
-    echo "--playlist  -p   <directory> The directory where the playlist will be. Music paths will be relative."
+    echo "--playlist  -p   <directory> The directory where the playlist will be."
+    echo "--absolute  -a               Use absolute paths when creating the playlist. Otherwise, they will be relative."
     echo
     echo "Example: "
     echo "      ./create_playlist.sh -m /home/joemama/Music/ABBA/Voulez-Vous -p /home/joemama/playlists"
@@ -24,7 +25,9 @@ CreatePlaylist () {
     playlistDir=$2 
     playlistName=$3
     beVerbose=$4
+    beAbsolute=$5
 
+    echo
     echo "Creating playlist..."
     scriptDir=${pwd}
     cd "$musicDir"
@@ -39,7 +42,11 @@ CreatePlaylist () {
     touch "$playlistDir/$playlistName.m3u"
     for i in "${thankYouForTheMusic[@]}"; do
 
-        echo "$(realpath --relative-to="$playlistDir" "$i")" >> "$playlistDir/$playlistName.m3u"
+        if $beAbsolute; then
+            echo "$musicDir/$i" >> "$playlistDir/$playlistName.m3u"
+        else
+            echo "$(realpath --relative-to="$playlistDir" "$i")" >> "$playlistDir/$playlistName.m3u"
+        fi
 
         if $beVerbose; then
             echo "Added $i"
@@ -48,6 +55,9 @@ CreatePlaylist () {
 
     # Delete " in file
     sed -e "s/\"//g" -i "$playlistDir/$playlistName.m3u"
+
+    # Delete any newlines in file
+    sed -e "/^[[:space:]]*$/d" -i "$playlistDir/$playlistName.m3u"
 
     cd "$scriptDir"
     echo "Finished $playlistName.m3u at $playlistDir"
@@ -63,6 +73,7 @@ fi
 musicDir=
 playlistDir=
 beVerbose=false
+beAbsolute=false
 
 # Process flags
 while [ "$1" != "" ]; do
@@ -81,6 +92,9 @@ while [ "$1" != "" ]; do
         ;;
     -v | --verbose)
         beVerbose=true
+        ;;
+    -a | --absolute)
+        beAbsolute=true
         ;;
     *) # Default
         Help
@@ -115,13 +129,21 @@ playlistDir=$(realpath "$playlistDir")
 playlistName="myPlaylist"
 read -p "Name of playlist? " playlistName
 
+echo
 echo "Music directory is $musicDir"
 echo "Playlist will be created in $playlistDir"
 echo "It will be named $playlistName.m3u"
+
+if $beAbsolute; then
+    echo "Will use absolute file paths in the playlist."
+else
+    echo "Will use relative file paths in the playlist."
+fi
+
 read -p "Okay to continue? (Y/n): " option
 
 if [ "$option" == "" ] || [ "$option" == "Y" ] || [ "$option" == "y" ]; then
-    CreatePlaylist "$musicDir" "$playlistDir" "$playlistName" "$beVerbose"
+    CreatePlaylist "$musicDir" "$playlistDir" "$playlistName" "$beVerbose" "$beAbsolute"
     exit 0
 else
     exit 1
