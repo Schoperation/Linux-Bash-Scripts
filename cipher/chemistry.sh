@@ -51,6 +51,14 @@ SimpleEncode () {
     elements[Y]=Mn
     elements[Z]=Fe
     elements[" "]=" "
+    elements[.]=.
+    elements[,]=,
+    elements[";"]=";"
+    elements[:]=:
+    elements[-]=-
+    elements[?]=?
+    elements["!"]="!"
+    elements["'"]="'"
 
     encoded=
     for ((i=0; i<${#message}; i++ )); do
@@ -61,7 +69,7 @@ SimpleEncode () {
 }
 
 SimpleDecode () {
-    message=${1^^}
+    message=$1
 
     declare -A elements
     elements[H]=A
@@ -91,16 +99,24 @@ SimpleDecode () {
     elements[Mn]=Y
     elements[Fe]=Z
     elements[" "]=" "
+    elements[.]=.
+    elements[,]=,
+    elements[";"]=";"
+    elements[:]=:
+    elements[-]=-
+    elements[?]=?
+    elements["!"]="!"
+    elements["'"]="'"
 
     decoded=
     for ((i=0; i<${#message}; i++ )); do
         char=
-        if [$i -eq ${#message}]; then
+        if [ $i -eq ${#message} ]; then
             char=${message:$i:1}
         else
             j=$i+1
             case ${message:$j:1} in
-                +([[:lower:]])      char=${message:$i:2};;
+                [[:lower:]])       char=${message:$i:2};;
                 *)                  char=${message:$i:1};;
             esac
         fi
@@ -233,11 +249,11 @@ ASCIIEncode () {
     elements[118]="Og"
     elements[" "]=" "
 
-    return elements
+    echo "in progress"
 }
 
 ASCIIDecode () {
-    echo "test"
+    echo "in progress"
 }
 
 # Start of program
