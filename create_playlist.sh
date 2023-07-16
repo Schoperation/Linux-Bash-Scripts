@@ -10,10 +10,11 @@ Help () {
     echo "--verbose   -v               Print music files as they are added to the playlist."
     echo "--music     -m   <directory> The directory where the music is. Picks up just mp3, ogg, wav, and m4a for now. ONLY in the same directory."
     echo "--playlist  -p   <directory> The directory where the playlist will be."
+    echo "--name      -n   <name>      The name of the playlist. If there are spaces, put it between double quotes."
     echo "--absolute  -a               Use absolute paths when creating the playlist. Otherwise, they will be relative."
     echo
     echo "Example: "
-    echo "      ./create_playlist.sh -m /home/joemama/Music/ABBA/Voulez-Vous -p /home/joemama/playlists"
+    echo "      ./create_playlist.sh -m /home/joemama/Music/ABBA/Voulez-Vous -p /home/joemama/playlists -n my_new_playlist"
     echo
     echo "Creates a playlist that points to all music in -m's directory."
     echo
@@ -72,6 +73,7 @@ fi
 
 musicDir=
 playlistDir=
+playlistName="my_playlist"
 beVerbose=false
 beAbsolute=false
 
@@ -95,6 +97,10 @@ while [ "$1" != "" ]; do
         ;;
     -a | --absolute)
         beAbsolute=true
+        ;;
+    -n | --name)
+        shift
+        playlistName=$1
         ;;
     *) # Default
         Help
@@ -125,14 +131,10 @@ fi
 musicDir=$(realpath "$musicDir")
 playlistDir=$(realpath "$playlistDir")
 
-# Ask for name of playlist
-playlistName="myPlaylist"
-read -p "Name of playlist? " playlistName
-
 echo
-echo "Music directory is $musicDir"
-echo "Playlist will be created in $playlistDir"
-echo "It will be named $playlistName.m3u"
+echo "Music directory is    $musicDir"
+echo "Playlist will be in   $playlistDir"
+echo "It will be named      $playlistName.m3u"
 
 if $beAbsolute; then
     echo "Will use absolute file paths in the playlist."
