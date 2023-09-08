@@ -5,7 +5,7 @@
 
 # Set speaker and microphone variables
 SPEAKERS="alsa_output.usb-Corsair_Corsair_VOID_PRO_Wireless_Gaming_Headset-00.analog-stereo"
-MIC="alsa_input.usb-Corsair_Corsair_VOID_PRO_Wireless_Gaming_Headset-00.analog-mono"
+MIC="alsa_input.usb-Corsair_Corsair_VOID_PRO_Wireless_Gaming_Headset-00.mono-fallback"
 
 # Used to store the indices of the modules created
 NUM=0
@@ -23,13 +23,16 @@ INDICES[4]=$(pactl load-module module-loopback sink=$SPEAKERS source=TBR.monitor
 echo -n "The indices are: "
 for i in ${INDICES[@]}; do echo -n "$i, "; done
 
+echo
 # Find the ID of the Discord source output. It's (assumbly) the only one with a single channel, 44100Hz, s16le...
-discordID=$(pactl list source-outputs short | grep "s16le 1ch 44100Hz" | cut -f1)
+discordID=$(pactl list source-outputs short | grep "protocol-native.c" | grep "s16le 1ch 44100Hz" | cut -f1)
 pactl move-source-output $discordID Combined.monitor
 
 # Launch pavucontrol with instructions
 echo -e "\n\nSet any applications in the Playback tab to \"ToBeRecorded\" to share audio!"
-echo -e "You can adjust the game volume for THEM by going to the Recording tab and adjusting the \"Loopback to CombinedOutput from Monitor of ToBeRecorded\". Usually the second loopback.\n"
+echo "It is recommended to turn OFF noise suppression, especially for video games."
+echo -e "\nYou can adjust the game volume for THEM by going to the Recording tab and adjusting"
+echo -e "\"Loopback to CombinedOutput from Monitor of ToBeRecorded\". Usually the second loopback.\n"
 pavucontrol &>/dev/null &
 
 # Pause before deleting
