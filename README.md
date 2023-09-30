@@ -17,3 +17,6 @@ Creates a m3u playlist relative to a folder of music. Getting the filenames to p
 **ciphers**  
 Some ciphers I thought were cool and decided to write in Bash of all things...
 
+**download_yt_vid**
+Takes a video link in your clipboard and instantly downloads it to your computer. Requires xclip and an installation of youtube-dl.
+
