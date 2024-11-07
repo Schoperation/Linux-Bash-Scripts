@@ -7,7 +7,7 @@ Help () {
     echo
     echo "--help                -h  Prints this help message."
     echo "--url                 -u  The URL of the video to download."
-    echo "--yt-dl-directory     -y  The path to where the youtube-dl program is located."
+    echo "--yt-dl-directory     -y  The path to where the youtube downloading program is."
     echo "--output-directory    -o  The path to where the video will be downloaded."
     echo
 }
@@ -17,8 +17,7 @@ Download () {
     ytDlDir=$(realpath "$2")
     outputDir=$(realpath "$3")
 
-    cd $ytDlDir
-    ./youtube-dl -f mp4 -o "$outputDir/%(title)s.%(ext)s" $url 
+    $ytDlDir -f "bv[filesize<=8000000]+ba[filesize<=8000000]" --recode-video webm -o "$outputDir/%(title)s.%(ext)s" $url 
 }
 
 if [ $# -eq 0 ]; then
@@ -57,15 +56,15 @@ while [ "$1" != "" ]; do
 done
 
 if [ "$ytDlDir" == "" ]; then
-    echo "You must provide a directory with youtube-dl, using --yt-dl-directory <directory>"
+    echo "You must provide a path to a youtube downloader, using --yt-dl-directory <directory>"
     exit 1
 elif [ "$outputDir" == "" ]; then
     echo "You must provide a directory to store the video, using --output-directory <directory>"
     exit 1
 fi
 
-if [[ ! -d $ytDlDir ]]; then
-    echo "$ytDlDir is not a real directory."
+if [[ ! -f $ytDlDir ]]; then
+    echo "$ytDlDir is not a real file."
     exit 1
 elif [[ ! -d $outputDir ]]; then
     echo "$outputDir is not a real directory."
