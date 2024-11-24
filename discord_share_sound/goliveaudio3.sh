@@ -30,7 +30,7 @@ echo -n "The module indices are: "
 for i in ${MODULE_INDICES[@]}; do echo -n "$i, "; done
 
 echo
-# Find the ID of the Discord source output. It's (assumbly) the only one with a single channel, 44100Hz, s16le...
+# Find the ID of the Discord source output. It's (assumably) the only one with a single channel, 44100Hz, s16le...
 discordID=$(pactl list source-outputs short | grep "protocol-native.c" | grep "s16le 1ch 44100Hz" | cut -f1)
 pactl move-source-output $discordID Combined.monitor
 
